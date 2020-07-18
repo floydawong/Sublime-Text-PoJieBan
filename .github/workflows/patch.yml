@@ -1,0 +1,88 @@
+name: Patch
+
+on:
+  push:
+    branches:
+      - "*"
+      - "*/*"
+  pull_request:
+    branches:
+      - "*"
+      - "*/*"
+
+jobs:
+  st_win:
+    name: Sublime Text (Windows)
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set variables
+        id: vars
+        run: |
+         echo ::set-output name=sha_short::$(git rev-parse --short=8 ${{ github.sha }})
+
+      # https://github.com/actions/starter-workflows/issues/68#issuecomment-617683761
+      - name: Set ENV variables
+        run: |
+          source "st_variables.sh"
+          for v in `env`; do echo "::set-env name=${v%%=*}::${v##*=}"; done
+
+      - name: Do patch
+        run: bash go.sh win
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: patched_sublime_text_build_${{ env.ST_VERSION }}_x64.zip
+          path: output/patched_sublime_text_build_${{ env.ST_VERSION }}_x64.zip
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          asset_name: patched_sublime_text_build_${{ env.ST_VERSION }}_x64.zip
+          file: output/patched_sublime_text_build_${{ env.ST_VERSION }}_x64.zip
+          tag: st-${{ env.ST_VERSION }}-${{ steps.vars.outputs.sha_short }}
+          release_name: ST ${{ env.ST_VERSION }} - ${{ steps.vars.outputs.sha_short }}
+          overwrite: true
+
+  st_linux:
+    name: Sublime Text (Linux)
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set variables
+        id: vars
+        run: |
+         echo ::set-output name=sha_short::$(git rev-parse --short=8 ${{ github.sha }})
+
+      # https://github.com/actions/starter-workflows/issues/68#issuecomment-617683761
+      - name: Set ENV variables
+        run: |
+          source "st_variables.sh"
+          for v in `env`; do echo "::set-env name=${v%%=*}::${v##*=}"; done
+
+      - name: Do patch
+        run: bash go.sh linux
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: patched_sublime_text_build_${{ env.ST_VERSION }}_x64.tar.xz
+          path: output/patched_sublime_text_build_${{ env.ST_VERSION }}_x64.tar.xz
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          asset_name: patched_sublime_text_build_${{ env.ST_VERSION }}_x64.tar.xz
+          file: output/patched_sublime_text_build_${{ env.ST_VERSION }}_x64.tar.xz
+          tag: st-${{ env.ST_VERSION }}-${{ steps.vars.outputs.sha_short }}
+          release_name: ST ${{ env.ST_VERSION }} - ${{ steps.vars.outputs.sha_short }}
+          overwrite: true

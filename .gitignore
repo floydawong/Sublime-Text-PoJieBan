@@ -1,0 +1,8 @@
+/my_scripts/
+/output/
+
+*.7z
+*.gz
+*.tar
+*.xz
+*.zip
