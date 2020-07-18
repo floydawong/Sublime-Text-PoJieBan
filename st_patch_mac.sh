@@ -17,8 +17,9 @@ st_patch_mac () {
         "$(pwd)/Sublime Text.app/Contents/MacOS/Sublime Text" \
         "$(pwd)/Sublime Text.app/Contents/MacOS/Data/"
 
-    rm -f "Sublime Text.app/Contents/MacOS/Sublime Text/"*.bak
+    rm -f "Sublime Text.app/Contents/MacOS/"*.bak
 
+    codesign --remove-signature "Sublime Text.app"
     zip -9r "patched_${ST_TARBALL}" "Sublime Text.app/"
     mv -f "patched_${ST_TARBALL}" "${OUTPUT_DIR}"
 

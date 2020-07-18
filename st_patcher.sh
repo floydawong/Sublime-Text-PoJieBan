@@ -61,7 +61,7 @@ patch_sublime_text_exe () {
 
         xxd -ps "${bin_path}" | tr -d '\r\n' > "${bin_hex}"
 
-        sed -i'' \
+        sed -i.bak \
             $(: skip local revoked license check ) \
             -e 's/97940d/000000/g' \
             $(: replace "sublimetext.com" with "sublimetext_com" ) \
@@ -74,7 +74,7 @@ patch_sublime_text_exe () {
         xxd -r -ps "${bin_hex}" "${bin_path}"
         chmod a+x "${bin_path}"
 
-        rm -f "${bin_hex}"
+        rm -f "${bin_hex}"*
 
         echo "* patching executable... done"
 
