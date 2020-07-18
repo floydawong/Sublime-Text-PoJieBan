@@ -32,4 +32,10 @@ if [[ "${PLATFORM}" = "all" ]] || [[ "${PLATFORM}" = "linux" ]]; then
     st_patch_linux   "${PATCHER_PATH}" "${OUTPUT_DIR}" "${ST_VERSION}"
 fi
 
+if [[ "${PLATFORM}" = "all" ]] || [[ "${PLATFORM}" = "mac" ]]; then
+    # shellcheck disable=SC1091
+    source "st_patch_mac.sh"
+    st_patch_mac   "${PATCHER_PATH}" "${OUTPUT_DIR}" "${ST_VERSION}"
+fi
+
 popd || exit

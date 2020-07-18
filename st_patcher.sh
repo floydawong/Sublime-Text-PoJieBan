@@ -40,9 +40,12 @@ patch_sublime_text_exe () {
         # portable mode (Windows)
         "./sublime_text.exe"
         "../sublime_text.exe"
-        # portable mode (Linux, Mac)
+        # portable mode (Linux)
         "./sublime_text"
         "../sublime_text"
+        # portable mode (Mac)
+        "./Sublime Text"
+        "../Sublime Text"
     )
 
     for bin_path in "${bin_paths[@]}"; do

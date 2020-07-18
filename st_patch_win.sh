@@ -13,7 +13,9 @@ st_patch_win () {
     unzip -o "${ST_TARBALL_X64}" -d "sublime_text/"
     mkdir -p "sublime_text/Data/"
 
-    "${PATCHER_PATH}" "$(pwd)/sublime_text/sublime_text.exe" "$(pwd)/sublime_text/Data/"
+    "${PATCHER_PATH}" \
+        "$(pwd)/sublime_text/sublime_text.exe" \
+        "$(pwd)/sublime_text/Data/"
 
     pushd "sublime_text/" || exit
 

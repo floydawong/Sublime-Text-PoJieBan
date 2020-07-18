@@ -13,7 +13,9 @@ st_patch_linux () {
     tar xJf "${ST_TARBALL_X64}"
     mkdir -p "sublime_text/Data/"
 
-    "${PATCHER_PATH}" "$(pwd)/sublime_text/sublime_text" "$(pwd)/sublime_text/Data/"
+    "${PATCHER_PATH}" \
+        "$(pwd)/sublime_text/sublime_text" \
+        "$(pwd)/sublime_text/Data/"
 
     rm -f "sublime_text/"*.bak
     tar cJf "patched_${ST_TARBALL_X64}" "sublime_text/"
