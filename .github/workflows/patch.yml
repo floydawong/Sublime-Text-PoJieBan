@@ -40,6 +40,7 @@ jobs:
           path: output/patched_sublime_text_build_${{ env.ST_VERSION }}_x64.zip
 
       - name: Upload binaries to release
+        if: ${{ github.ref == 'refs/heads/master' }}
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -78,6 +79,7 @@ jobs:
           path: output/patched_sublime_text_build_${{ env.ST_VERSION }}_x64.tar.xz
 
       - name: Upload binaries to release
+        if: ${{ github.ref == 'refs/heads/master' }}
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -116,6 +118,7 @@ jobs:
           path: output/patched_sublime_text_build_${{ env.ST_VERSION }}_mac.zip
 
       - name: Upload binaries to release
+        if: ${{ github.ref == 'refs/heads/master' }}
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
