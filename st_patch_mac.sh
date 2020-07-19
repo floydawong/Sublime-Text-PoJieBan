@@ -21,7 +21,6 @@ st_patch_mac () {
 
     codesign --remove-signature "Sublime Text.app"
     zip -9r "patched_${ST_TARBALL}" "Sublime Text.app/"
-    mv -f "patched_${ST_TARBALL}" "${OUTPUT_DIR}"
 
     # clean up
     rm -rf "${ST_TARBALL}" "Sublime Text.app/"
