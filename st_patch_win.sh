@@ -5,6 +5,7 @@ st_patch_win () {
     local OUTPUT_DIR="$2"
     local ST_VERSION="$3"
     local ST_TARBALL_X64="sublime_text_build_${ST_VERSION}_x64.zip"
+    local ST_TARBALL_X64_OUTPUT="sublime_text_build_${ST_VERSION}_x64.7z"
 
     pushd "${OUTPUT_DIR}" || exit
 
@@ -18,7 +19,9 @@ st_patch_win () {
         "$(pwd)/sublime_text/Data/"
 
     rm -f "sublime_text/"*.bak
-    zip -9r "patched_${ST_TARBALL_X64}" "sublime_text/"
+    7za a -t7z -m0=lzma2 -mx=9 -mfb=64 -md=1024m -ms=on \
+        "patched_${ST_TARBALL_X64_OUTPUT}" \
+        "sublime_text/"
 
     # clean up
     rm -rf "${ST_TARBALL_X64}" "sublime_text/"
