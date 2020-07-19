@@ -17,13 +17,8 @@ st_patch_win () {
         "$(pwd)/sublime_text/sublime_text.exe" \
         "$(pwd)/sublime_text/Data/"
 
-    pushd "sublime_text/" || exit
-
-    rm -f *.bak
-    zip -9r "patched_${ST_TARBALL_X64}" *
-    mv -f "patched_${ST_TARBALL_X64}" "${OUTPUT_DIR}"
-
-    popd || exit
+    rm -f "sublime_text/"*.bak
+    zip -9r "patched_${ST_TARBALL_X64}" "sublime_text/"
 
     # clean up
     rm -rf "${ST_TARBALL_X64}" "sublime_text/"
