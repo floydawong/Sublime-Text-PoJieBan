@@ -21,21 +21,31 @@ if [[ "${PLATFORM}" = "" ]]; then
 fi
 
 if [[ "${PLATFORM}" = "all" ]] || [[ "${PLATFORM}" = "win" ]]; then
+    echo "* Starting Windows build..."
+
     # shellcheck disable=SC1091
     source "st_patch_win.sh"
     st_patch_win   "${PATCHER_PATH}" "${OUTPUT_DIR}" "${ST_VERSION}"
 fi
 
 if [[ "${PLATFORM}" = "all" ]] || [[ "${PLATFORM}" = "linux" ]]; then
+    echo "* Starting Linux build..."
+
     # shellcheck disable=SC1091
     source "st_patch_linux.sh"
     st_patch_linux   "${PATCHER_PATH}" "${OUTPUT_DIR}" "${ST_VERSION}"
 fi
 
 if [[ "${PLATFORM}" = "all" ]] || [[ "${PLATFORM}" = "mac" ]]; then
-    # shellcheck disable=SC1091
-    source "st_patch_mac.sh"
-    st_patch_mac   "${PATCHER_PATH}" "${OUTPUT_DIR}" "${ST_VERSION}"
+    echo "* Starting Mac build..."
+
+    if [[ "$(uname -s)" != "Darwin" ]]; then
+        echo "* Skipped... You must use MacOS to do a Mac build."
+    else
+        # shellcheck disable=SC1091
+        source "st_patch_mac.sh"
+        st_patch_mac   "${PATCHER_PATH}" "${OUTPUT_DIR}" "${ST_VERSION}"
+    fi
 fi
 
 popd || exit
