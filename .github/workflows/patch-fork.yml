@@ -1,0 +1,111 @@
+name: Patch
+
+on:
+  push:
+    branches:
+      - "*"
+      - "*/*"
+  pull_request:
+    branches:
+      - "*"
+      - "*/*"
+
+jobs:
+  st_win:
+    name: Sublime Text (Windows)
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      # https://github.com/actions/starter-workflows/issues/68#issuecomment-617683761
+      - name: Set ENV variables
+        run: |
+          source "st_variables.sh"
+          for v in `env`; do echo "::set-env name=${v%%=*}::${v##*=}"; done
+
+      - name: Do patch
+        run: bash go.sh win
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: sublime_text_build_${{ env.ST_VERSION }}_win_x64.7z
+          path: output/patched_sublime_text_build_${{ env.ST_VERSION }}_x64.7z
+
+      - name: Upload binaries to release
+        if: ${{ github.ref == 'refs/heads/master' }}
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          asset_name: sublime_text_build_${{ env.ST_VERSION }}_win_x64.7z
+          file: output/patched_sublime_text_build_${{ env.ST_VERSION }}_x64.7z
+          tag: st-${{ env.ST_VERSION }}.${{ env.GITHUB_RUN_NUMBER }}
+          overwrite: true
+
+  st_linux:
+    name: Sublime Text (Linux)
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      # https://github.com/actions/starter-workflows/issues/68#issuecomment-617683761
+      - name: Set ENV variables
+        run: |
+          source "st_variables.sh"
+          for v in `env`; do echo "::set-env name=${v%%=*}::${v##*=}"; done
+
+      - name: Do patch
+        run: bash go.sh linux
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: sublime_text_build_${{ env.ST_VERSION }}_linux_x64.tar.xz
+          path: output/patched_sublime_text_build_${{ env.ST_VERSION }}_x64.tar.xz
+
+      - name: Upload binaries to release
+        if: ${{ github.ref == 'refs/heads/master' }}
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          asset_name: sublime_text_build_${{ env.ST_VERSION }}_linux_x64.tar.xz
+          file: output/patched_sublime_text_build_${{ env.ST_VERSION }}_x64.tar.xz
+          tag: st-${{ env.ST_VERSION }}.${{ env.GITHUB_RUN_NUMBER }}
+          overwrite: true
+
+  st_mac:
+    name: Sublime Text (Mac)
+
+    runs-on: macos-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      # https://github.com/actions/starter-workflows/issues/68#issuecomment-617683761
+      - name: Set ENV variables
+        run: |
+          source "st_variables.sh"
+          for v in `env`; do echo "::set-env name=${v%%=*}::${v##*=}"; done
+
+      - name: Do patch
+        run: bash go.sh mac
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: sublime_text_build_${{ env.ST_VERSION }}_mac.zip
+          path: output/patched_sublime_text_build_${{ env.ST_VERSION }}_mac.zip
+
+      - name: Upload binaries to release
+        if: ${{ github.ref == 'refs/heads/master' }}
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          asset_name: sublime_text_build_${{ env.ST_VERSION }}_mac.zip
+          file: output/patched_sublime_text_build_${{ env.ST_VERSION }}_mac.zip
+          tag: st-${{ env.ST_VERSION }}.${{ env.GITHUB_RUN_NUMBER }}
+          overwrite: true
